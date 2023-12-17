@@ -104,6 +104,7 @@ bb.`,
 ]
 
 onInput("k", _ => {
+  const ptile = getFirst(player);
   if(isHole(ptile.x,ptile.y+1)) moveTileTo(ptile.x,ptile.y+1);
   else if(isHole(ptile.x,ptile.y-1)) moveTileTo(ptile.x,ptile.y-1);
   else if(isHole(ptile.x-1,ptile.y)) moveTileTo(ptile.x-1,ptile.y);
@@ -115,6 +116,8 @@ afterInput(_ => {
 })
 
 const moveTileTo = (x,y) => {
+    const ptile = getFirst(player);
+
   const ut = rbTile(ptile.x,ptile.y);
   if(ut){
     ut.x = x;
@@ -132,7 +135,6 @@ const setLevel = (n) => {
   setMap(levels[n]);
   addSprite(1,1,player);
   addSprite(2,2,target);
-  ptile = getFirst(player);
 }
 
 const isHole = (x,y) => {
@@ -147,9 +149,9 @@ const rbTile = (x,y) => {
   return undefined;
 }
 
-onInput("w", _ => {ptile.y -= 1;})
-onInput("s", _ => {ptile.y += 1;})
-onInput("a", _ => {ptile.x -= 1;})
-onInput("d", _ => {ptile.x += 1;})
+onInput("w", _ => {getFirst(player).y -= 1;})
+onInput("s", _ => {getFirst(player).y += 1;})
+onInput("a", _ => {getFirst(player).x -= 1;})
+onInput("d", _ => {getFirst(player).x += 1;})
 
 setLevel(0)

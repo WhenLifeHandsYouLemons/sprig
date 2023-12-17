@@ -1,17 +1,22 @@
-
 # The Toolkit
 
 Sprig is a tiny construction kit to build tile based games. 
 The games are written in JavaScript.
 It was made by Hack Club, a global community of teen coders who 
 believe people learn best by making things they care about 
-and sharing them with others.
+and sharing them with others. You can watch [this video](https://www.youtube.com/watch?v=ZOPYB6dw4Os) for an introduction to Sprig website.
 
-If this is your first time using Sprig, try playing through the tutorial. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
+Run games by hitting the `Run` button or pressing `Shift+Enter`.
+
+## Getting Help
+
+If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started). From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
+
+<!-- If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started).
+
+You can also watch this [introduction to the editor](https://www.youtube.com/watch?v=GEbDRR_cqJI) or [walkthrough](https://www.youtube.com/watch?v=1UTLS4aO9bQ) on how to make a game. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch. -->
 
 If you ever need help, have ideas, or want to meet other game-makers, join the community in the [#sprig](https://hackclub.slack.com/archives/C02UN35M7LG) channel on the [Hack Club Slack](https://hackclub.com/slack).
-
-Run games by hitting the `Run` button or pressing `shift+enter`.
 
 ## Level Design
 
@@ -24,13 +29,13 @@ Bitmap keys must be a single character.
 We recommend storing character keys in variables.
 
 ```js
-const player = "p";
-const wall = "w";
+const player = "p"
+const wall = "w"
 
 setLegend(
-    [ player, bitmap`...` ],
-    [ wall, bitmap`...` ],
-);
+  [ player, bitmap`...` ],
+  [ wall, bitmap`...` ],
+)
 ```
 
 To create a new bitmap, type 
@@ -74,9 +79,9 @@ You might want to keep track of multiple levels using an array to switch between
 
 ```js
 const levels = [
-    map`...`,
-    map`...`,
-    // etc.
+  map`...`,
+  map`...`,
+  // etc.
 ]
 setMap(levels[0])
 
@@ -90,10 +95,10 @@ Solid sprites can't overlap with each other.
 This is useful for creating things like walls:
 
 ```js
-const player = "p";
-const wall = "w";
+const player = "p"
+const wall = "w"
 
-setSolids([player, wall]);
+setSolids([ player, wall ])
 ```
 
 ### setPushables(pushMap)
@@ -101,15 +106,23 @@ setSolids([player, wall]);
 Use `setPushables` to make sprites push other sprites around. The sprite on the left will be able to push all sprites listed on the right.
 
 ```js
-const player = "p";
-const block = "b";
+const player = "p"
+const block = "b"
 
 setPushables({ 
-    [player]: [ block, player ] 
+  [player]: [ block, player ] 
 })
 ```
 
 **Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.
+
+### width()
+
+Get the width of the current map.
+
+### height()
+
+Get the height of the current map.
 
 ## User Input
 
@@ -123,8 +136,8 @@ Do something when the player presses a control:
 
 ```js
 onInput("d", () => {
-    // Move the player one tile to the right
-    getFirst(player).x += 1
+  // Move the player one tile to the right
+  getFirst(player).x += 1
 })
 ```
 
@@ -134,9 +147,9 @@ Runs after every input event has finished being handled. Useful for tasks like c
 
 ```js
 afterInput(() => {
-    if (getAll(block).length > 0) {
-        console.log("you win")
-    }
+  if (getAll(block).length > 0) {
+    console.log("you win")
+  }
 })
 ```
 
@@ -147,9 +160,9 @@ Each tile can contain any number of sprites stacked on top of each other.
 Sprites contain:
 ```
 {
-    type
-    x
-    y
+  type
+  x
+  y
 }
 ```
 
@@ -211,13 +224,15 @@ Shortcut for `getAll(type)[0]`.
 
 You can add text with optional `x`, `y`, and `color`.
 
+In Sprig, each color is represented by a single character. Like `bitmap` and `map`, you can use the `color` keyword to pick a color for your text. A preview of your selected color will also show next to the character.
+
 For example:
 
 ```js
 addText("hello", { 
-    x: 10, 
-    y: 4, 
-    color: [ 255, 0, 0 ] // red
+  x: 10,
+  y: 4,
+  color: color`3`
 })
 ```
 
@@ -249,23 +264,46 @@ const playback = playTune(melody, Infinity)
 playback.end()
 ```
 
-
-## Debugging
-
-Open up your browser console to debug.
-
-You can look at game state by running `getState()` in the console.
-
 <!-- 
 
 ## Idioms
 
-### Get Neighbors
+Find Pattern
 
-### Find Pattern
+```
+const neighbors = (sprite) => {
+  const neighbors = []
 
-### Replace
+  const x = sprite.x
+  const y = sprite.y
 
-### Count Overlaps
+  getTile(x+1, y).forEach(s => {
+    neighbors.push(s)
+  })
 
+  getTile(x-1, y).forEach(s => {
+    neighbors.push(s)
+  })
+
+  getTile(x, y+1).forEach(s => {
+    neighbors.push(s)
+  })
+
+  getTile(x, y-1).forEach(s => {
+    neighbors.push(s)
+  })
+
+  return neighbors
+}
+
+const replace = (oldType, newType) => getAll(oldType).forEach(s => {
+  s.type = newType
+})
+
+const overlaps = tilesWith(type0, type1, ...).length
+
+const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type)
+
+const getTypeFromTile = (x, y, type) => getTile(x, y, type).find(s => s.type === type)
+```
  -->

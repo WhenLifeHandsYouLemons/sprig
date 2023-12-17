@@ -267,6 +267,7 @@ const resetGravity = async () => {
 };
 
 const shake = () => {
+  if (typeof document === "undefined") return;
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
 
   gameCanvasContainer.classList.add("shake");
@@ -296,7 +297,7 @@ const killPlayer = () => {
   addText("You lost!", {
     x: 10,
     y: 4,
-    color: [255, 0, 0],
+    color: color`3`,
   });
 
   shake();
@@ -352,7 +353,7 @@ afterInput(() => {
     addText("You Win!", {
       x: 5,
       y: 4,
-      color: [0, 0, 255],
+      color: color`5`,
     });
 
     status = "win";

@@ -462,14 +462,13 @@ setInterval(() => {
 
 // let score = 90
 setInterval(() => {
-  velocityMsg = round(-velocity*10) + " " + round(hvelocity*10);
+  let velocityMsg = round(-velocity*10) + " " + round(hvelocity*10);
   console.log(-velocity, velocityMsg);
   // textWrite(9, 1, score + "");
   clearText();
-  let col = [255, 255, 255]
-  addText(velocityMsg, {y: 0, color:col})
-  addText(msg, {y: 1, color:col})
-  addText(msg2, {y: 3, color:col})
+  addText(velocityMsg, {y: 0, color:color`2`})
+  addText(msg, {y: 1, color:color`2`})
+  addText(msg2, {y: 3, color:color`2`})
 }, 100)
 
 let alreadyNexted = false;
@@ -635,7 +634,7 @@ function round2(n) {
 function getLandingQuality(x, y) {
   if (y < 0) // going up
     return "Nice flare!";
-  speed = Math.sqrt(x*x + y*y);
+  let speed = Math.sqrt(x*x + y*y);
   if (speed > 0.3)
     return "WTF was that landing";
   if (speed > 0.2)

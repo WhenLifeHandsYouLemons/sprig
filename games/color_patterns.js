@@ -139,13 +139,17 @@ r.b.b
 b.b.b
 r.rbb`,
 ]
-
+let ptile;
 onInput("j", _ => {
-    colorTile(ptile.x, ptile.y).type = blue;
+  ptile = getFirst(player);
+  if (getTile(ptile.x, ptile.y).length === 1) return;
+  colorTile(ptile.x, ptile.y).type = blue;
 });
 
 onInput("l", _ => {
-    colorTile(ptile.x, ptile.y).type = red;
+  ptile = getFirst(player);
+  if (getTile(ptile.x, ptile.y).length === 1) return;
+  colorTile(ptile.x, ptile.y).type = red;
 });
 
 onInput("i", _ => {
@@ -174,9 +178,9 @@ const checkResult = () => {
     const r = results[level];
     for(let y=0;y<5;y++){
       for(let x=0;x<5;x++){
-          res = r.charAt(y*6+x+1);
+          let res = r.charAt(y*6+x+1);
           if('rb'.indexOf(res)==-1) continue;
-          t = colorTile(x,y).type;
+          let t = colorTile(x,y).type;
           if(t!=res) return false; 
       }
     }
@@ -194,15 +198,14 @@ const previousLevel = () => {
 }
 
 const setLevel = (n) => {
-  setMap(levels[n].trim() + '\n.....');
+  setMap(levels[n]);
   addSprite(1,0,player);
-  ptile = getFirst(player);
 }
 
 
-onInput("w", _ => {ptile.y -= 1;})
-onInput("s", _ => {ptile.y += 1;})
-onInput("a", _ => {ptile.x -= 1;})
-onInput("d", _ => {ptile.x += 1;})
+onInput("w", _ => {getFirst(player).y -= 1;})
+onInput("s", _ => {getFirst(player).y += 1;})
+onInput("a", _ => {getFirst(player).x -= 1;})
+onInput("d", _ => {getFirst(player).x += 1;})
 
 setLevel(0)

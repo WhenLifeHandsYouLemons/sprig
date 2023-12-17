@@ -1,0 +1,38 @@
+---
+import "../../global.css";
+import "./gallery.css";
+import { getSession } from "../../lib/game-saving/account";
+import Navbar from "../../components/navbar-main";
+import StandardHead from "../../components/standard-head.astro";
+import { getGalleryGames } from "../../lib/game-saving/gallery";
+import Gallery from "./gallery";
+
+const session = await getSession(Astro.cookies);
+
+const games = await getGalleryGames();
+const tags = [
+	...new Set(games.reduce<string[]>((p, c) => [...p, ...c.tags], [])),
+];
+---
+
+
+<html lang="en">
+	<head>
+		<StandardHead title="Gallery" />
+
+		<script>
+			if (localStorage.getItem("isDark") === "true") {
+				document.body.style.backgroundColor = "#2f2f2f";
+				document.body.style.color = "white";
+			}
+		</script>
+	</head>
+	<body>
+		<Navbar session={session} />
+		<div class="copy-container">
+			<h1>Gallery</h1>
+
+			<Gallery client:only="preact" games={games} tags={tags} />			
+		</div>
+	</body>
+</html>

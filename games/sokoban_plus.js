@@ -44,6 +44,8 @@ const wall22 = "k";
 const wall23 = "l";
 const wall24 = "m";
 const wall25 = "n";
+const wall26 = "q";
+const hack = "r";
 setLegend(
   [player, bitmap`
 ................
@@ -623,8 +625,41 @@ LLLLLLLLLLLLLLLL
 0000000000000000
 0000000000000000
 0000000000000000`],
+  [wall26, bitmap`
+0000000000000000
+LLLLLLLLLLLLLLLL
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+LL00000000000000
+0L00000000000000`],//lol
+  [hack, bitmap`
+0000000000000000
+0LLLLLLLLLLLLLLL
+0L33333333333300
+0L33223333333300
+0L33223333333300
+0L33223333333300
+0L33223333333300
+0L33222222233300
+0L33222222223300
+0L33222332223300
+0L33223333223300
+0L33223333223300
+0L33223333223300
+0L33333333333300
+0L00000000000000
+0L00000000000000`]
 );
-let level = 0;
 const levels = [
   map`
 pc.a`,
@@ -647,6 +682,14 @@ cc..
 ..c.
 .cp.
 .cca`,
+  map`
+ay.p..f
+c54.3..
+....uzq
+zz4.1.f
+.......
+.2zvz4.
+.cayac.`,
   map`
 p.y.
 .c1a
@@ -727,14 +770,6 @@ z4.2z
 .....
 ..o..`,
   map`
-an.p..n
-cnn.n..
-....nnn
-nnn.n.n
-.......
-.nnnnn.
-.canac.`,
-  map`
 p...
 ..ce
 .caa
@@ -772,15 +807,46 @@ po..ep`,
 ..cddc..
 ........`,
   map`
-gllllh
+rllllh
 knnnnm
 knnnnm
 knnnnm
 knnnnm
 fjjjji`
 ];
+const texts = [
+  "Use WASD to move\nand push boxes to\nthe goal.",
+  "Use K to hide trail",
+  "",
+  "Boxes can push\nother boxes.",
+  "",
+  "",
+  "Use J to restart",
+  "Don't go straight there...",
+  "",
+  "A boxes to A goals\nB boxes to B goals",
+  "Both players are\ncontrolled\nsimultaneously",
+  "",
+  "",
+  "",
+  "",
+  "Gray boxes go anywhere",
+  "",
+  "Loop",
+  "Gray goals take any box",
+  "This will be common",
+  "",
+  "See?",
+  "Wiggle around. (:",
+  "Loop again",
+  "Final Level!",
+  ""
+];
+let muted = false;
+let level = 0;
 const currentLevel = levels[level];
 setMap(currentLevel);
+addText(texts[level], {x:1, color:color`1`});
 setSolids([player, boxa, boxb, boxn, wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9, wall10, wall11, wall12, wall13, wall14, wall15, wall16, wall17, wall18, wall19, wall11, wall20, wall21, wall22, wall23, wall24, wall25]);
 setPushables({
   [player]: [boxa, boxb, boxn],
@@ -793,38 +859,29 @@ const playerstep = tune`
 166.66666666666666: a4^166.66666666666666,
 5000`;
 const bg = tune`
-379.746835443038: d4^379.746835443038 + c5~379.746835443038,
-379.746835443038: b4~379.746835443038 + e4^379.746835443038 + g5/379.746835443038,
-379.746835443038: c5~379.746835443038,
-379.746835443038: d5~379.746835443038 + f4^379.746835443038 + b5/379.746835443038,
-379.746835443038: e5~379.746835443038 + g5/379.746835443038,
-379.746835443038: e4^379.746835443038 + a5/379.746835443038,
-379.746835443038: d5~379.746835443038,
-379.746835443038: c5~379.746835443038 + d4^379.746835443038 + g5/379.746835443038,
-379.746835443038: b4~379.746835443038,
-379.746835443038: b5/379.746835443038,
-379.746835443038: g5/379.746835443038,
-379.746835443038: b4~379.746835443038 + f4^379.746835443038 + a5/379.746835443038,
-379.746835443038: c5~379.746835443038,
-379.746835443038: d5~379.746835443038 + e4^379.746835443038,
-379.746835443038: g5/379.746835443038,
-379.746835443038: b4~379.746835443038 + d4^379.746835443038 + b5/379.746835443038,
-379.746835443038: a4~379.746835443038 + g5/379.746835443038,
-379.746835443038: g4~379.746835443038 + c4^379.746835443038 + a5/379.746835443038,
-379.746835443038: g5/379.746835443038 + a4~379.746835443038 + d4^379.746835443038,
-379.746835443038: g4~379.746835443038,
-379.746835443038: g5/379.746835443038 + e4^379.746835443038,
-379.746835443038: a4~379.746835443038,
-379.746835443038: b5/379.746835443038 + f4^379.746835443038 + b4~379.746835443038,
-379.746835443038: g5/379.746835443038 + c5~379.746835443038,
-379.746835443038: a5/379.746835443038 + e4^379.746835443038 + d5~379.746835443038,
-379.746835443038,
-379.746835443038: d4^379.746835443038 + c5~379.746835443038,
-379.746835443038: g5/379.746835443038 + b4~379.746835443038,
-379.746835443038: c4^379.746835443038 + a4~379.746835443038,
-379.746835443038: b5/379.746835443038 + d4^379.746835443038,
-379.746835443038: g5/379.746835443038 + e4^379.746835443038 + a4~379.746835443038,
-379.746835443038: a5/379.746835443038 + f4^379.746835443038 + b4~379.746835443038`;
+375: b4~375 + g5/375 + c4^375,
+375: b5/375,
+375: b4~375 + g5/375 + d4^375,
+375: c5~375 + a5/375,
+375,
+375: b4~375 + g5/375 + e4^375,
+375,
+375: b4~375 + b5/375,
+375: a4~375 + g5/375 + d4^375,
+375: a5/375,
+375: b4~375 + g5/375 + c4^375,
+375,
+375: b4~375 + g5/375 + d4^375,
+375: c5~375 + b5/375,
+375: b4~375 + g5/375,
+375: a4~375 + a5/375 + e4^375,
+375: g4~375,
+375: g5/375,
+375: g4~375 + d4^375,
+375: b5/375,
+375: g4~375 + g5/375 + d4^375,
+375: a4~375 + a5/375,
+375`;
 const reset = tune`
 166.66666666666666,
 166.66666666666666: c5-166.66666666666666,
@@ -852,7 +909,7 @@ const win = tune`
 166.66666666666666: e5~166.66666666666666,
 166.66666666666666: c5~166.66666666666666,
 3000`;
-playTune(bg, Infinity);
+let bgi = playTune(bg, Infinity);
 
 let trails = true;
 // START - PLAYER MOVEMENT CONTROLS
@@ -865,45 +922,42 @@ function everyMove() {
   for (i of trailsa) {
     i.type = trailb;
   }
-  playTune(playerstep);
-}
-onInput("s", () => {
-  let players = getAll(player);
-  everyMove();
-  for (let i of players) {
+  for(let i of getAll(player)){
     if(trails){
       addSprite(i.x, i.y, traila);
     }
+  }
+  if(!muted){
+    playTune(playerstep);
+  }
+}
+let players;
+let i;
+onInput("s", () => {
+  players = getAll(player);
+  everyMove();
+  for (i of players) {
     i.y += 1;
   }
 });
 onInput("d", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.x += 1;
   }
 });
 onInput("w", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.y -= 1;
   }
 });
 onInput("a", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.x -= 1;
   }
 });
@@ -927,24 +981,33 @@ onInput("k", () => {
   }
   trails = !trails;
 });
+onInput("i", () => {
+  muted = !muted;
+  if(muted){
+    bgi.end();
+  }else{
+    bgi = playTune(bg, Infinity);
+  }
+});
 afterInput(() => {
-  // count the number of tiles with goals
   const targetNumber = tilesWith(goala).length + tilesWith(goalb).length + tilesWith(goaln).length;
-  // count the number of tiles with goals and boxes
   const numberCovered = tilesWith(goala, boxa).length + tilesWith(goalb, boxb).length + tilesWith(goala, boxn).length + tilesWith(goalb, boxn).length + tilesWith(goaln, boxa).length + tilesWith(goaln, boxb).length + tilesWith(goaln, boxn).length;
-  if (numberCovered === targetNumber) {
-    // increase the current level number
+  if (numberCovered === targetNumber && !(level === levels.length-1)) {
     level = level + 1;
+    clearText();
+    addText(texts[level], {x:1, color:color`1`});
     const currentLevel = levels[level];
-    playTune(cont);
-    // make sure the level exists and if so set the map
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
-    } else {
-      addText("You win!", {
-        y: 4,
-        color: [0, 255, 0]
-      });
+    if(!muted){
+      playTune(cont);
+    }
+    setMap(currentLevel);
+  }
+  if (level === levels.length-1) {
+    addText("You win!", {
+      y: 4,
+      color: color`4`
+    });
+    if(!muted){
       playTune(win);
     }
   }
